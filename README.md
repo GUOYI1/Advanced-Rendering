@@ -3,19 +3,19 @@ Path Tracer: Project of Advanced rendering
 
 **University of Pennsylvania, Advanced Computer Graphics**
 
-**The code is implemented according to principle and source code of book "Physically Based Rendering: From Theory to Implementation, Third version", by Matt Pharr, Wenzel Jakob, and Greg Humphreys**
+**The code is implemented according to principle and source code of book "Physically Based Rendering: From Theory to Implementation, Third version", by Matt Pharr, Wenzel Jakob, and Greg Humphreys**\<br>  
 
-##Main features include:     
-####Monte Carlo Path tracing 
-####Multiple Importance Sampling
-####Different Integrators, including Naive Integrator, Direct Light Integrator and FullLight Integrator
-####Differenet BSDF Models,including Lambertian,Orennayar,Specular, Glossy, Transmission, and Microfacet
-####Different Light sources, including arealight, pointlight, spotlight and distant light
-####Acceleration Structure, including BVH tree and K-D Tree  
-####Len-based Camera
-####Implicit surface rendering
+##Main features include:\<br>      
+####Monte Carlo Path tracing\<br>            
+####Multiple Importance Sampling\<br>                      
+####Different Integrators, including Naive Integrator, Direct Light Integrator and FullLight Integrator\<br>                     
+####Differenet BSDF Models,including Lambertian,Orennayar,Specular, Glossy, Transmission, and Microfacet\<br>                       
+####Different Light sources, including arealight, pointlight, spotlight and distant light\<br>                   
+####Acceleration Structure, including BVH tree and K-D Tree\<br>              
+####Len-based Camera\<br>                  
+####Implicit surface rendering\<br>                
 
-##Some rendering results:
+####Some rendering results:\<br>  
 
 #####Custome Scene 1        
           
