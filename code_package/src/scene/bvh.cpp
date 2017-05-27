@@ -183,7 +183,10 @@ bool BVHAccel::Intersect(const Ray &ray, Intersection *isect) const
             currentNodeIndex = nodesToVisit[--toVisitOffset];
         }
     }
+    if(isect_min.t>ray.tMax)
+        return false;
     *isect=isect_min;
+    ray.tMax=isect->t;
     return hit;
 }
 

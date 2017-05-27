@@ -1,16 +1,16 @@
 #include <raytracing/ray.h>
 
 Ray::Ray(const Point3f &o, const Vector3f &d):
-    origin(o),
-    direction(d)
+    origin(o), direction(d),tMax(Infinity),medium(nullptr)
 {}
 
 Ray::Ray(const glm::vec4 &o, const glm::vec4 &d):
     Ray(Point3f(o), Vector3f(d))
 {}
-
+Ray::Ray(const Point3f &o, const Vector3f &d, Float tMax, const Medium *medium):
+    origin(o), direction(d), tMax(tMax), medium(medium) {}
 Ray::Ray(const Ray &r):
-    Ray(r.origin, r.direction)
+    Ray(r.origin, r.direction,r.tMax,r.medium)
 {}
 
 Ray Ray::GetTransformedCopy(const Matrix4x4 &T) const

@@ -31,6 +31,24 @@ void Scene::SetLBCamera(Float lensRadius, Float focalDistance)
     lb_camera.focalDistance=focalDistance;
 }
 
+bool Scene::IntersectTr(Ray ray, Sampler &sampler, Intersection *isect,
+                        Color3f *Tr) const
+{
+    *Tr = Color3f(1.f);
+    while (true) {
+        bool hitSurface = Intersect(ray, isect);
+        // Accumulate beam transmittance for ray segment
+        if (ray.medium) *Tr *= ray.medium->Tr(ray, sampler);
+
+        // Initialize next ray segment or terminate transmittance computation
+        if (!hitSurface) return false;
+        if (isect->objectHit->GetMaterial() != nullptr\
+                ||isect->objectHit->GetAreaLight())
+            return true;
+
+        ray = isect->SpawnRay(ray.direction);
+    }
+}
 bool Scene::Intersect(const Ray &ray, Intersection *isect) const
 {
     if(bvh)
@@ -49,9 +67,10 @@ bool Scene::Intersect(const Ray &ray, Intersection *isect) const
             Intersection testIsect;
             if(p->Intersect(ray, &testIsect))
             {
-                if(testIsect.t < isect->t || isect->t < 0)
+                if((testIsect.t < isect->t || isect->t < 0) && testIsect.t<ray.tMax)
                 {
                     *isect = testIsect;
+                    ray.tMax=isect->t;
                     result = true;
                 }
             }

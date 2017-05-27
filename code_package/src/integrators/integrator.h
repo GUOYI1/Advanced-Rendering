@@ -55,3 +55,9 @@ protected:
     Bounds2i bounds;                  // The min and max bounds of the film to which this thread renders
     int recursionLimit;
 };
+Color3f EstimateDirect(const Base_Intersection &it, const Vector3f& wo,const Point2f &uScattering,
+                        const Light &light, const Point2f &uLight,
+                        const Scene &scene, Sampler &sampler,
+                        bool handleMedia=false, bool specular=false);
+Color3f UniformSampleOneLight(const Base_Intersection &it, const Vector3f &wo,const Scene &scene,
+                               Sampler &sampler, bool handleMedia);

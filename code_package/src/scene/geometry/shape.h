@@ -15,6 +15,7 @@ enum SurfaceType{
     Tooth=1<<4
 };
 //static pcg32 colorRNG;
+class Base_Intersection;
 class Intersection;//Forward declaration because Intersection and Geometry cross-include each other
 class Material;
 
@@ -41,7 +42,7 @@ public:
 
     // Invokes the Sample below and converts the PDF from an area measure
     // to a solid angle measure
-    virtual Intersection Sample(const Intersection &ref, const Point2f &xi,
+    virtual Intersection Sample(const Base_Intersection &ref, const Point2f &xi,
                                float *pdf) const;
 
     // Sample a point on the surface of the shape and return the PDF with

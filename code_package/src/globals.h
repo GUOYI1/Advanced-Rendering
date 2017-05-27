@@ -14,7 +14,8 @@
 #include <assert.h>
 #include <string.h>
 
-
+#define MaxFloat std::numeric_limits<Float>::max()
+#define Infinity std::numeric_limits<Float>::infinity()
 // Global constants. You may not end up using all of these.
 static const float ShadowEpsilon = 0.0001f;
 static const float RayEpsilon = 0.000005f;
@@ -164,7 +165,25 @@ inline Vector3f SphericalDirection(Float sinTheta,Float cosTheta, Float phi)
 {
     return Vector3f(sinTheta * std::cos(phi),sinTheta * std::sin(phi),cosTheta);
 }
+inline Vector3f SphericalDirection(Float sinTheta, Float cosTheta, Float phi,
+                                   const Vector3f &x, const Vector3f &y,
+                                   const Vector3f &z) {
+    return sinTheta * std::cos(phi) * x + sinTheta * std::sin(phi) * y +
+           cosTheta * z;
+}
 inline int Log2Int(uint32_t v)
 {
     return 31 - __builtin_clz(v);
+}
+inline float BalanceHeuristic(int nf, Float fPdf, int ng, Float gPdf)
+{
+    //TODO
+    return nf*fPdf/(nf*fPdf+ng*gPdf);
+}
+
+inline float PowerHeuristic(int nf, Float fPdf, int ng, Float gPdf)
+{
+    //TODO
+    Float f=nf*fPdf,g=ng*gPdf;
+    return f*f/(f*f+g*g);
 }

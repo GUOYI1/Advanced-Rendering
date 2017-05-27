@@ -18,7 +18,7 @@ class Camera : public Drawable
 public:
     Camera();
     Camera(unsigned int w, unsigned int h);
-    Camera(unsigned int w, unsigned int h, const Vector3f &e, const Vector3f &r, const Vector3f &worldUp);
+    Camera(unsigned int w, unsigned int h, const Vector3f &e, const Vector3f &r, const Vector3f &worldUp,const Medium* medium=nullptr);
     Camera(const Camera &c);
 
     void CopyAttributes(const Camera &c);
@@ -42,6 +42,7 @@ public:
 
     Matrix4x4 GetViewProj() const;
 
+    const Medium *medium;
     void RecomputeAttributes();
 
     virtual Ray Raycast(const Point2f &pt) const;         //Creates a ray in 3D space given a 2D point on the screen, in screen coordinates.
@@ -66,7 +67,7 @@ public:
     Len_Base_Camera();
     Len_Base_Camera(unsigned int w, unsigned int h,Float lensRadius,Float focalDistance);
     Len_Base_Camera(unsigned int w, unsigned int h, const Vector3f &e, const Vector3f &r, \
-                    const Vector3f &worldUp,Float lensRadius,Float focalDistance);
+                    const Vector3f &worldUp,const Medium *medium,Float lensRadius,Float focalDistance);
     Len_Base_Camera(const Camera &c, Float lensRadius,Float focalDistance);
     Len_Base_Camera(const Len_Base_Camera &c);
     virtual Ray Raycast(const Point2f &pt) const;

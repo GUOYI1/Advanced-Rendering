@@ -9,6 +9,10 @@ bool Primitive::Intersect(const Ray &r, Intersection *isect) const
     {
         material->ProduceBSDF(isect);
     }
+    if (mediumInterface.IsMediumTransition())
+        isect->mediumInterface = mediumInterface;
+    else
+        isect->mediumInterface = MediumInterface(r.medium);
     return true;
 }
 bool Primitive::IntersectP(const Ray &r) const

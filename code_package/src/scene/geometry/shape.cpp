@@ -12,7 +12,7 @@ void Shape::InitializeIntersection(Intersection *isect, float t, Point3f pLocal)
     isect->t = t;
 }
 
-Intersection Shape::Sample(const Intersection &ref, const Point2f &xi, float *pdf) const
+Intersection Shape::Sample(const Base_Intersection &ref, const Point2f &xi, float *pdf) const
 {
     //TODO
     Intersection I;

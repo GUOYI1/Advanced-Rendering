@@ -80,7 +80,7 @@
           "name" : "Light Source",
           "type" : "DiffuseAreaLight",
           "lightColor" : [17,12,4],
-          "intensity" : 2,
+          "intensity" : 6,
           "transform" : {
             "translate" : [0,7.45,0],
             "rotate" : [90,0,0],

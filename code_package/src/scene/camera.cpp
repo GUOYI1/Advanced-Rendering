@@ -17,7 +17,7 @@ Camera::Camera(unsigned int w, unsigned int h):
     Camera(w, h, Vector3f(0,0,10), Vector3f(0,0,0), Vector3f(0,1,0))
 {}
 
-Camera::Camera(unsigned int w, unsigned int h, const Vector3f &e, const Vector3f &r, const Vector3f &worldUp):
+Camera::Camera(unsigned int w, unsigned int h, const Vector3f &e, const Vector3f &r, const Vector3f &worldUp, const Medium *medium):
     fovy(45),
     width(w),
     height(h),
@@ -25,7 +25,7 @@ Camera::Camera(unsigned int w, unsigned int h, const Vector3f &e, const Vector3f
     far_clip(1000),
     eye(e),
     ref(r),
-    world_up(worldUp)
+    world_up(worldUp),medium(medium)
 {
     RecomputeAttributes();
 }
@@ -44,7 +44,7 @@ Camera::Camera(const Camera &c):
     right(c.right),
     world_up(c.world_up),
     V(c.V),
-    H(c.H)
+    H(c.H),medium(c.medium)
 {}
 
 void Camera::CopyAttributes(const Camera &c)
@@ -62,6 +62,7 @@ void Camera::CopyAttributes(const Camera &c)
     aspect = c.aspect;
     V = c.V;
     H = c.H;
+    medium=c.medium;
 }
 
 void Camera::RecomputeAttributes()
@@ -136,7 +137,7 @@ Ray Camera::Raycast(float x, float y) const
 Ray Camera::RaycastNDC(float ndc_x, float ndc_y) const
 {
     glm::vec3 P = ref + ndc_x*H + ndc_y*V;
-    Ray result(eye, glm::normalize(P - eye));
+    Ray result(eye, glm::normalize(P - eye),Infinity,medium);
     return result;
 }
 
@@ -229,14 +230,14 @@ Len_Base_Camera::Len_Base_Camera(unsigned int w, unsigned int h, Float lensRadiu
 
 
 Len_Base_Camera::Len_Base_Camera(unsigned int w, unsigned int h, const Vector3f &e, const Vector3f &r, \
-                                 const Vector3f &worldUp, Float lensRadius, Float focalDistance):\
-    Camera(w,h,e,r,worldUp),lensRadius(lensRadius),focalDistance(focalDistance),sampler(new Sampler(100,0)){}
+                                 const Vector3f &worldUp, const Medium *medium,Float lensRadius, Float focalDistance):\
+    Camera(w,h,e,r,worldUp,medium),lensRadius(lensRadius),focalDistance(focalDistance),sampler(new Sampler(100,0)){}
 
 Len_Base_Camera::Len_Base_Camera(const Camera &c, Float lensRadius, Float focalDistance):
     Camera(c),lensRadius(lensRadius),focalDistance(focalDistance),sampler(new Sampler(100,0)){}
 
 Len_Base_Camera::Len_Base_Camera(const Len_Base_Camera &c):
-    Camera(c.width,c.height,c.eye,c.ref,c.world_up),lensRadius(lensRadius),focalDistance(focalDistance),sampler(new Sampler(100,0)){}
+    Camera(c.width,c.height,c.eye,c.ref,c.world_up,c.medium),lensRadius(lensRadius),focalDistance(focalDistance),sampler(new Sampler(100,0)){}
 
 Ray Len_Base_Camera::Raycast(const Point2f &pt) const
 {

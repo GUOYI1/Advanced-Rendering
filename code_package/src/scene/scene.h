@@ -20,6 +20,7 @@ public:
     QList<std::shared_ptr<Primitive>> primitives;
     QList<std::shared_ptr<Material>> materials;
     QList<std::shared_ptr<Light>> lights;
+    QList<std::shared_ptr<Light>> infiniteLights;
 
     //In the scene, there are multiple types of cameras with the same basic attributes.
     Camera camera;
@@ -41,7 +42,8 @@ public:
     void Clear();
 
     bool Intersect(const Ray& ray, Intersection* isect) const;
-
+    bool IntersectTr(Ray ray, Sampler &sampler, Intersection *isect,
+                            Color3f *Tr) const;
     void clearBVH();
     void clearKD();
 };

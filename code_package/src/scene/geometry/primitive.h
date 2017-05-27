@@ -3,6 +3,7 @@
 #include <scene/lights/light.h>
 #include <scene/materials/material.h>
 #include <scene/bounds.h>
+#include<scene/media/media.h>
 
 class AreaLight;
 class Shape;
@@ -37,5 +38,6 @@ public:
     std::shared_ptr<Shape> shape;
     std::shared_ptr<Material> material;
     std::shared_ptr<AreaLight> areaLight;
+    MediumInterface mediumInterface;
 
 };

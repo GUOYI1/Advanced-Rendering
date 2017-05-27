@@ -55,7 +55,10 @@ SOURCES += \
     $$PWD/scene/lights/spot.cpp \
     $$PWD/scene/lights/point.cpp \
     $$PWD/scene/geometry/implicit_surface.cpp \
-    $$PWD/scene/lights/distancelight.cpp
+    $$PWD/scene/lights/distancelight.cpp \
+    $$PWD/scene/media/homogeneous.cpp \
+    $$PWD/scene/media/media.cpp \
+    $$PWD/integrators/volintegrator.cpp
 
 HEADERS += \
     $$PWD/mainwindow.h \
@@ -112,4 +115,8 @@ HEADERS += \
     $$PWD/scene/lights/spot.h \
     $$PWD/scene/lights/point.h \
     $$PWD/scene/geometry/implicit_surface.h \
-    $$PWD/scene/lights/distancelight.h
+    $$PWD/scene/lights/distancelight.h \
+    $$PWD/scene/media.h \
+    $$PWD/scene/media/media.h \
+    $$PWD/scene/media/homogeneous.h \
+    $$PWD/integrators/volintegrator.h

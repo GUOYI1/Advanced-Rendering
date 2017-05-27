@@ -19,7 +19,7 @@ public:
     // Sample a point on the surface of the shape and return the PDF with
     // respect to area on the surface.
     virtual Intersection Sample(const Point2f &xi, Float *pdf) const;
-    virtual Intersection Sample(const Intersection &ref, const Point2f &xi,
+    virtual Intersection Sample(const Base_Intersection &ref, const Point2f &xi,
                                 float *pdf) const;
 
     Bounds3f WorldBound() const;

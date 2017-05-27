@@ -58,7 +58,7 @@ Point2f Sphere::GetUVCoordinates(const Point3f &point) const
 }
 
 
-Intersection Sphere::Sample(const Intersection &ref, const Point2f &xi, float *pdf) const
+Intersection Sphere::Sample(const Base_Intersection &ref, const Point2f &xi, float *pdf) const
 {
     Point3f center = Point3f(transform.T() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
     Vector3f centerToRef = glm::normalize(center - ref.point);

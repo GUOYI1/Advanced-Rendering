@@ -11,6 +11,7 @@
 #include <integrators/directlightingintegrator.h>
 #include <integrators/naiveintegrator.h>
 #include <integrators/fulllightingintegrator.h>
+#include <integrators/volintegrator.h>
 #include <scene/lights/diffusearealight.h>
 #include <QDateTime>
 
@@ -38,7 +39,7 @@ MyGL::MyGL(QWidget *parent)
     origin = QPoint(0, 0);
     rubberband_offset = QPoint(0, 0);
     something_rendered = false;
-    makeBVH = true;
+    makeBVH = false;
     makeKD=false;
     maxBVHPrims = 1;
 }
@@ -336,6 +337,11 @@ void MyGL::SceneLoadDialog()
     //Load new objects based on the JSON file chosen.
 
     json_reader.LoadSceneFromFile(file, local_path, scene);
+    for(int i=0;i<scene.lights.size();i++)
+    {
+        if(scene.lights[i]->type==Infinite)
+            scene.infiniteLights.push_back(scene.lights[i]);
+    }
     gl_camera.CopyAttributes(scene.camera);
     ResizeToSceneCamera();
 }
@@ -436,13 +442,16 @@ void MyGL::RenderScene()
             case NAIVE_LIGHTING:
                 rt = new NaiveIntegrator(tileBounds, &scene, sampler->Clone(seed), recursionLimit);
                 break;
+            case VOLUME:
+                rt=new VolIntegrator(tileBounds, &scene, sampler->Clone(seed), recursionLimit,0.3);
+                break;
             }
 #define MULTITHREAD // Comment this line out to be able to debug with breakpoints.
 #ifdef MULTITHREAD
             QThreadPool::globalInstance()->start(rt);
 #else
             // Use this commented-out code to only render a tile with your desired pixel
-                        Point2i debugPixel(205,250);
+                        Point2i debugPixel(200,360);
                         if(x0 < debugPixel.x && x1 >= debugPixel.x && y0 < debugPixel.y && y1 >= debugPixel.y)
                         {
                             rt->Render();
@@ -545,6 +554,9 @@ void MyGL::slot_SetIntegratorType(int t)
         break;
     case 3:
         integratorType = FULL_LIGHTING;
+        break;
+    case 4:
+        integratorType=VOLUME;
         break;
     }
 }

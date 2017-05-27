@@ -159,32 +159,35 @@ Color3f FullLightingIntegrator::Li(const Ray &ray, const Scene &scene, std::shar
          if(fabs(lightPdf)==0.0f)
              L_i=Color3f(0.0f);
          wiW=glm::normalize(wiW);
-         r=intersect.SpawnRay(wiW);
-         Intersection occlusion;
-         if(scene.Intersect(r,&occlusion))
+         f_light=intersect.bsdf->f(woW,wiW);
+         if(glm::length(f_light-Color3f(0,0,0))>FLT_EPSILON)
          {
-             //judge if the Trace ray is occluded
-             if(selected_light->type==Area)
+             r=intersect.SpawnRay(wiW);
+             Intersection occlusion;
+             if(scene.Intersect(r,&occlusion))
              {
-                 if(occlusion.objectHit->areaLight!=scene.lights[select_index])
-                 //L_i=occlusion.Le(-shadow_Ray.direction);
-                 L_i=Color3f(0.0f);
-             }
-             else if(selected_light->type==Spot||selected_light->type==Point)
-             {
-                 if(glm::length(occlusion.point-r.origin)<\
-                         glm::length(selected_light->GetCenter()-r.origin))
+                 //judge if the Trace ray is occluded
+                 if(selected_light->type==Area)
+                 {
+                     if(occlusion.objectHit->areaLight!=scene.lights[select_index])
+                         //L_i=occlusion.Le(-shadow_Ray.direction);
+                         L_i=Color3f(0.0f);
+                 }
+                 else if(selected_light->type==Spot||selected_light->type==Point)
+                 {
+                     if(glm::length(occlusion.point-r.origin)<\
+                             glm::length(selected_light->GetCenter()-r.origin))
+                         L_i=Color3f(0.0f);
+                 }
+                 else if(selected_light->type==Distance)
                      L_i=Color3f(0.0f);
              }
-             else if(selected_light->type==Distance)
-                  L_i=Color3f(0.0f);
-         }
-         f_light=intersect.bsdf->f(woW,wiW);
-         scatteringPdf=intersect.bsdf->Pdf(woW,wiW);
-         lightweight=PowerHeuristic(1,lightPdf,1,scatteringPdf);
-         //lightweight=BalanceHeuristic(1,lightPdf,1,scatteringPdf);
-         Ld+=f_light*AbsDot(intersect.bsdf->normal,wiW)*L_i*lightweight/lightPdf;
 
+             scatteringPdf=intersect.bsdf->Pdf(woW,wiW);
+             lightweight=PowerHeuristic(1,lightPdf,1,scatteringPdf);
+             //lightweight=BalanceHeuristic(1,lightPdf,1,scatteringPdf);
+             Ld+=f_light*AbsDot(intersect.bsdf->normal,wiW)*L_i*lightweight/lightPdf;
+         }
          //////////////////////////////////////////////////////////////////////////
          //Remap xi
          xi=sampler->Get2D();
@@ -244,16 +247,5 @@ Color3f FullLightingIntegrator::Li(const Ray &ray, const Scene &scene, std::shar
 
 }
 
-float BalanceHeuristic(int nf, Float fPdf, int ng, Float gPdf)
-{
-    //TODO
-    return nf*fPdf/(nf*fPdf+ng*gPdf);
-}
 
-float PowerHeuristic(int nf, Float fPdf, int ng, Float gPdf)
-{
-    //TODO
-    Float f=nf*fPdf,g=ng*gPdf;
-    return f*f/(f*f+g*g);
-}
 

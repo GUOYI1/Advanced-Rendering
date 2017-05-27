@@ -5,6 +5,7 @@
 #include <scene/geometry/disc.h>
 #include <scene/geometry/squareplane.h>
 #include <scene/geometry/implicit_surface.h>
+#include <scene/geometry/inversesphere.h>
 #include <scene/materials/mattematerial.h>
 #include <scene/materials/mirrormaterial.h>
 #include <scene/materials/transmissivematerial.h>
@@ -15,7 +16,8 @@
 #include <scene/lights/point.h>
 #include<scene/lights/distancelight.h>
 #include <iostream>
-
+#include<scene/media/media.h>
+#include<scene/media/homogeneous.h>
 
 void JSONReader::LoadSceneFromFile(QFile &file, const QStringRef &local_path, Scene &scene)
 {
@@ -142,6 +144,10 @@ bool JSONReader::LoadGeometry(QJsonObject &geometry, QMap<QString, std::shared_p
     else if(QString::compare(type, QString("Disc")) == 0)
     {
         shape = std::make_shared<Disc>();
+    }
+    else if (QString::compare(type,QString("InverseSphere"))==0)
+    {
+        shape=std::make_shared<InverseSphere>();
     }
     else if(QString::compare(type, QString("Implicit")) == 0)
     {
@@ -480,7 +486,15 @@ Camera JSONReader::LoadCamera(QJsonObject& camera)
     if(camera.contains(QString("fov"))) result.fovy = camera["fov"].toDouble();
     if(camera.contains(QString("nearClip"))) result.near_clip = camera["nearClip"].toDouble();
     if(camera.contains(QString("farClip"))) result.far_clip = camera["farClip"].toDouble();
+    if(camera.contains(QString("mediumtype")))
+    {
+        QString mediumtype=camera["mediumtype"].toString();
+        glm::vec3 sigma_a=ToVec3(camera["sigma_a"].toArray());
+        glm::vec3 sigma_s=ToVec3(camera["sigma_s"].toArray());
+        if(QString::compare(mediumtype, QString("homogenous")) == 0)
+            result.medium=new HomogeneousMedium(sigma_a,sigma_s,0.1);
 
+    }
     result.RecomputeAttributes();
     return result;
 }

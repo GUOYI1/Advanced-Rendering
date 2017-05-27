@@ -141,6 +141,11 @@
               <string>Full Lighting</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>VolumeIntegrator</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="3">
@@ -189,7 +194,7 @@
              <string>Make BVH</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>

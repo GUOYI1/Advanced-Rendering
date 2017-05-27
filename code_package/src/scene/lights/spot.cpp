@@ -7,11 +7,14 @@ SpotLight::SpotLight(const Transform &T,const Color3f &emittedLight,
       cosTotalWidth(std::cos(glm::radians(totalWidth))),
       cosFalloffStart(std::cos(glm::radians(falloffStart))) {}
 
-Color3f SpotLight::Sample_Li(const Intersection &ref, const Point2f &u,
-                              Vector3f *wi, Float *pdf) const
+Color3f SpotLight::Sample_Li(const Base_Intersection &ref, const Point2f &u,
+                              Vector3f *wi, Float *pdf, Intersection *LightSample) const
 {
     *wi = glm::normalize(pLight - ref.point);
     *pdf = 1.f;
+    Intersection I(pLight,*wi,-1,MediumInterface());
+    if(LightSample)
+        *LightSample=I;
     return emittedLight * Falloff(-*wi) / glm::length2(pLight-ref.point);
 }
 
@@ -26,10 +29,10 @@ Float SpotLight::Falloff(const Vector3f &w) const {
 }
 
 
-Float SpotLight::Pdf_Li(const Intersection &, const Vector3f &) const {
+Float SpotLight::Pdf_Li(const Base_Intersection &, const Vector3f &) const {
     return 0.f;
 }
-Point3f SpotLight::GetCenter()
+Point3f SpotLight::GetCenter() const
 {
     return pLight;
 }

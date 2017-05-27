@@ -13,5 +13,3 @@ public:
     virtual Color3f Li(const Ray &ray, const Scene &scene, std::shared_ptr<Sampler> sampler, int depth,Color3f beta) const;
 };
 
-float BalanceHeuristic(int nf, Float fPdf, int ng, Float gPdf);
-float PowerHeuristic(int nf, Float fPdf, int ng, Float gPdf);
